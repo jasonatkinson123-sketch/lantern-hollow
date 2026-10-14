@@ -40,7 +40,7 @@ const ARCADE_REWARD_KEY='lantern-arcade-reward-v1';
 let arcadeRewards={progress:0,goal:8,passes:0,ticket:null};
 try{const stored=JSON.parse(localStorage.getItem(ARCADE_REWARD_KEY));if(stored&&Number.isInteger(stored.progress)&&Number.isInteger(stored.goal)&&Number.isInteger(stored.passes))arcadeRewards={...arcadeRewards,...stored}}catch{}
 function saveArcadeRewards(){try{localStorage.setItem(ARCADE_REWARD_KEY,JSON.stringify(arcadeRewards))}catch{}}
-function countArcadeEncounter(){arcadeRewards.progress++;let unlocked=false;if(arcadeRewards.progress>=arcadeRewards.goal){arcadeRewards.progress=0;arcadeRewards.goal=5;arcadeRewards.passes++;unlocked=true;}saveArcadeRewards();return unlocked}
+function countArcadeEncounter(){arcadeRewards.progress++;let unlocked=false;if(arcadeRewards.progress>=arcadeRewards.goal){arcadeRewards.progress=0;arcadeRewards.goal=5;arcadeRewards.passes++;arcadeRewards.ticket=null;unlocked=true;}saveArcadeRewards();return unlocked}
 function visitArcade(){if(!arcadeRewards.ticket){if(arcadeRewards.passes<1)return;arcadeRewards.passes--;arcadeRewards.ticket=globalThis.crypto?.randomUUID?.()||(Date.now().toString(36)+'_'+Math.random().toString(36).slice(2));saveArcadeRewards()}window.location.href='https://atkinsonjason.com/arcade/?from=math&ticket='+encodeURIComponent(arcadeRewards.ticket)}
 const arcadeReturn=new URLSearchParams(location.search).get('arcade');
 if(arcadeReturn==='done'){arcadeRewards.ticket=null;saveArcadeRewards()}
